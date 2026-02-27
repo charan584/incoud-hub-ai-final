@@ -1,0 +1,172 @@
+{
+  "branches": {
+    "CSE": {
+      "name": "Computer Science Engineering",
+      "years": {
+        "1": {
+          "subjects": {
+            "Mathematics": {
+              "units": [
+                { "name": "Unit 1: Differential Equations", "link": "/resources/cse/1/math/unit1" },
+                { "name": "Unit 2: Linear Algebra", "link": "/resources/cse/1/math/unit2" },
+                { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
+                { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
+              ]
+            },
+            "C Language": {
+              "units": [
+                { "name": "Complete Course Notes", "link": "/resources/cse/1/c/complete" },
+                { "name": "Unit 1: Basics", "link": "/resources/cse/1/c/unit1" },
+                { "name": "Unit 2: Control Structures", "link": "/resources/cse/1/c/unit2" }
+              ]
+            },
+            "Data Structures": {
+              "units": [
+                { "name": "Unit 1: Arrays & Linked Lists", "link": "/resources/cse/1/ds/unit1" },
+                { "name": "Unit 2: Stacks & Queues", "link": "/resources/cse/1/ds/unit2" },
+                { "name": "Unit 3: Trees", "link": "/resources/cse/1/ds/unit3" }
+              ]
+            },
+            "English": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
+              ]
+            },
+            "BEEE": {
+              "units": [
+                { "name": "Unit 1: DC Circuits", "link": "/resources/cse/1/beee/unit1" }
+              ]
+            },
+            "Chemistry": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/cse/1/chemistry/complete" }
+              ]
+            },
+            "Physics": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/cse/1/physics/complete" }
+              ]
+            },
+            "BCME": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/cse/1/bcme/complete" }
+              ]
+            }
+          }
+        },
+        "2": {
+          "subjects": {
+            "Operating Systems": {
+              "units": [
+                { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
+              ]
+            },
+            "DBMS": {
+              "units": [
+                { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "IT": {
+      "name": "Information Technology",
+      "years": {
+        "1": {
+          "subjects": {
+            "Mathematics": {
+              "units": [
+                { "name": "Unit 1: Differential Equations", "link": "/resources/it/1/math/unit1" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "AIDS": {
+      "name": "Artificial Intelligence & Data Science",
+      "years": {
+        "1": {
+          "subjects": {
+            "Python Programming": {
+              "units": [
+                { "name": "Complete Course", "link": "/resources/aids/1/python/complete" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "AIML": {
+      "name": "Artificial Intelligence & Machine Learning",
+      "years": {
+        "1": {
+          "subjects": {
+            "Mathematics": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/aiml/1/math/complete" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "MECH": {
+      "name": "Mechanical Engineering",
+      "years": {
+        "1": {
+          "subjects": {
+            "Engineering Mechanics": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/mech/1/mechanics/complete" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "CIVIL": {
+      "name": "Civil Engineering",
+      "years": {
+        "1": {
+          "subjects": {
+            "Engineering Drawing": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/civil/1/drawing/complete" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "ECE": {
+      "name": "Electronics & Communication Engineering",
+      "years": {
+        "1": {
+          "subjects": {
+            "Electronic Devices": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/ece/1/devices/complete" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "EEE": {
+      "name": "Electrical & Electronics Engineering",
+      "years": {
+        "1": {
+          "subjects": {
+            "Electrical Circuits": {
+              "units": [
+                { "name": "Complete Notes", "link": "/resources/eee/1/circuits/complete" }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
