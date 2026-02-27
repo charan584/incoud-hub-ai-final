@@ -79,6 +79,12 @@ const AdminLogin = () => {
                 Sign In
               </button>
             </form>
+
+            <div className="mt-6 text-center">
+              <button onClick={() => navigate('/admin-forgot-password')} className="text-sm text-brand-orange hover:text-white transition-colors">
+                Forgot password?
+              </button>
+            </div>
           </div>
 
           <div className="text-center mt-6 space-y-2">

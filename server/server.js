@@ -4,6 +4,7 @@ const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -13,6 +14,15 @@ const ADMIN_SECRET_KEY = 'incloudhub_admin_2024';
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Email Configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/incloudhub';
@@ -51,6 +61,10 @@ const UserSchema = new mongoose.Schema({
   branch: String,
   year: Number,
   skills: [String],
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
+  resetPasswordOTP: String,
+  resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -58,6 +72,8 @@ const AdminSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   name: String,
+  resetPasswordOTP: String,
+  resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -120,12 +136,86 @@ app.post('/api/auth/register', async (req, res) => {
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword, name });
+    const user = new User({ email, password: hashedPassword, name, isVerified: true });
     await user.save();
     
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.json({ success: true, token, user: { id: user._id, email: user.email, name: user.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Verify Email
+app.get('/api/auth/verify-email/:token', async (req, res) => {
+  try {
+    const user = await User.findOne({ verificationToken: req.params.token });
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'Invalid verification token' });
+    }
+    
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+    
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    
+    res.json({ success: true, token, user: { id: user._id, email: user.email, name: user.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Forgot Password - Send OTP
+app.post('/api/auth/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetPasswordOTP = otp;
+    user.resetPasswordExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset OTP - Incloudhub AI',
+      html: `<h2>Password Reset Request</h2><p>Your OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
+    });
+    
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Reset Password with OTP
+app.post('/api/auth/reset-password', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const user = await User.findOne({ 
+      email, 
+      resetPasswordOTP: otp,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+    }
+    
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+    
+    res.json({ success: true, message: 'Password reset successful' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -175,6 +265,60 @@ app.post('/api/auth/admin-login', async (req, res) => {
     const token = jwt.sign({ adminId: admin._id, email: admin.email, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.json({ success: true, token, admin: { id: admin._id, email: admin.email, name: admin.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin Forgot Password - Send OTP
+app.post('/api/auth/admin-forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const admin = await Admin.findOne({ email });
+    
+    if (!admin) {
+      return res.status(404).json({ success: false, error: 'Admin not found' });
+    }
+    
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    admin.resetPasswordOTP = otp;
+    admin.resetPasswordExpires = Date.now() + 600000;
+    await admin.save();
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Admin Password Reset OTP - Incloudhub AI',
+      html: `<h2>Admin Password Reset Request</h2><p>Your OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
+    });
+    
+    res.json({ success: true, message: 'OTP sent to your email' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin Reset Password with OTP
+app.post('/api/auth/admin-reset-password', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    
+    const admin = await Admin.findOne({ 
+      email, 
+      resetPasswordOTP: otp,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    
+    if (!admin) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+    }
+    
+    admin.password = await bcrypt.hash(newPassword, 10);
+    admin.resetPasswordOTP = undefined;
+    admin.resetPasswordExpires = undefined;
+    await admin.save();
+    
+    res.json({ success: true, message: 'Password reset successful' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
