@@ -5,25 +5,47 @@ import AntigravityCanvas from '../components/AntigravityCanvas';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     
     try {
       const response = await api.post('/auth/register', { name, email, password });
       
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate('/landing');
+        setSuccess('OTP sent to your email');
+        setStep(2);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    
+    try {
+      const response = await api.post('/auth/verify-registration', { email, otp });
+      
+      if (response.data.success) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        setSuccess('Account verified! Redirecting...');
+        setTimeout(() => navigate('/landing'), 2000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Verification failed');
     }
   };
 
@@ -61,7 +83,14 @@ const Register = () => {
                 {error}
               </div>
             )}
-            <form onSubmit={handleRegister} className="space-y-6">
+            {success && (
+              <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-sm">
+                {success}
+              </div>
+            )}
+
+            {step === 1 && (
+              <form onSubmit={handleRegister} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2 text-white/70">Name</label>
                 <input
@@ -103,9 +132,33 @@ const Register = () => {
                 type="submit"
                 className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand-orange/20"
               >
-                Create Account
+                Send OTP
               </button>
             </form>
+            )}
+
+            {step === 2 && (
+              <form onSubmit={handleVerifyOTP} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-white/70">Enter OTP</label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="w-full px-4 py-3 bg-brand-charcoal border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange transition-colors"
+                    placeholder="Enter 6-digit OTP"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand-orange/20"
+                >
+                  Verify & Create Account
+                </button>
+              </form>
+            )}
           </div>
 
           <p className="text-center mt-6 text-white/40 text-sm">

@@ -62,7 +62,8 @@ const UserSchema = new mongoose.Schema({
   year: Number,
   skills: [String],
   isVerified: { type: Boolean, default: false },
-  verificationToken: String,
+  verificationOTP: String,
+  verificationOTPExpires: Date,
   resetPasswordOTP: String,
   resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now }
@@ -72,6 +73,9 @@ const AdminSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   name: String,
+  isVerified: { type: Boolean, default: false },
+  verificationOTP: String,
+  verificationOTPExpires: Date,
   resetPasswordOTP: String,
   resetPasswordExpires: Date,
   createdAt: { type: Date, default: Date.now }
@@ -125,7 +129,7 @@ app.get('/api/health', (req, res) => {
 
 // Routes
 
-// Register
+// Register - Send OTP
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -136,7 +140,48 @@ app.post('/api/auth/register', async (req, res) => {
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword, name, isVerified: true });
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    const user = new User({ 
+      email, 
+      password: hashedPassword, 
+      name, 
+      verificationOTP: otp,
+      verificationOTPExpires: Date.now() + 600000
+    });
+    await user.save();
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify Your Account - Incloudhub AI',
+      html: `<h2>Welcome to Incloudhub AI!</h2><p>Your verification OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
+    });
+    
+    res.json({ success: true, message: 'OTP sent to your email. Please verify to complete registration.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Verify Registration OTP
+app.post('/api/auth/verify-registration', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    const user = await User.findOne({ 
+      email, 
+      verificationOTP: otp,
+      verificationOTPExpires: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+    }
+    
+    user.isVerified = true;
+    user.verificationOTP = undefined;
+    user.verificationOTPExpires = undefined;
     await user.save();
     
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -221,7 +266,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
   }
 });
 
-// Admin Signup
+// Admin Signup - Send OTP
 app.post('/api/auth/admin-signup', async (req, res) => {
   try {
     const { email, password, name, adminKey } = req.body;
@@ -236,7 +281,48 @@ app.post('/api/auth/admin-signup', async (req, res) => {
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
-    const admin = new Admin({ email, password: hashedPassword, name });
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    const admin = new Admin({ 
+      email, 
+      password: hashedPassword, 
+      name,
+      verificationOTP: otp,
+      verificationOTPExpires: Date.now() + 600000
+    });
+    await admin.save();
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify Admin Account - Incloudhub AI',
+      html: `<h2>Admin Account Verification</h2><p>Your verification OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
+    });
+    
+    res.json({ success: true, message: 'OTP sent to your email. Please verify to complete registration.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Verify Admin Registration OTP
+app.post('/api/auth/verify-admin-registration', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    const admin = await Admin.findOne({ 
+      email, 
+      verificationOTP: otp,
+      verificationOTPExpires: { $gt: Date.now() }
+    });
+    
+    if (!admin) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+    }
+    
+    admin.isVerified = true;
+    admin.verificationOTP = undefined;
+    admin.verificationOTPExpires = undefined;
     await admin.save();
     
     const token = jwt.sign({ adminId: admin._id, email: admin.email, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -255,6 +341,10 @@ app.post('/api/auth/admin-login', async (req, res) => {
     const admin = await Admin.findOne({ email });
     if (!admin) {
       return res.status(400).json({ success: false, error: 'Invalid credentials' });
+    }
+    
+    if (!admin.isVerified) {
+      return res.status(400).json({ success: false, error: 'Please verify your email first' });
     }
     
     const validPassword = await bcrypt.compare(password, admin.password);
@@ -361,6 +451,10 @@ app.post('/api/auth/login', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ success: false, error: 'Invalid credentials' });
+    }
+    
+    if (!user.isVerified) {
+      return res.status(400).json({ success: false, error: 'Please verify your email first' });
     }
     
     const validPassword = await bcrypt.compare(password, user.password);

@@ -5,27 +5,48 @@ import AntigravityCanvas from '../components/AntigravityCanvas';
 
 const AdminSignup = () => {
   const navigate = useNavigate();
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
     adminKey: ''
   });
+  const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     try {
       const response = await api.post('/auth/admin-signup', formData);
       if (response.data.success) {
-        localStorage.setItem('adminToken', response.data.token);
-        localStorage.setItem('admin', JSON.stringify(response.data.admin));
-        navigate('/admin-dashboard');
+        setSuccess('OTP sent to your email');
+        setStep(2);
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Admin signup failed');
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await api.post('/auth/verify-admin-registration', { email: formData.email, otp });
+      if (response.data.success) {
+        localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('admin', JSON.stringify(response.data.admin));
+        setSuccess('Account verified! Redirecting...');
+        setTimeout(() => navigate('/admin-dashboard'), 2000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Verification failed');
     }
   };
 
@@ -53,7 +74,14 @@ const AdminSignup = () => {
                 {error}
               </div>
             )}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {success && (
+              <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-sm">
+                {success}
+              </div>
+            )}
+
+            {step === 1 && (
+              <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2 text-white/70">Name</label>
                 <input
@@ -103,9 +131,33 @@ const AdminSignup = () => {
                 type="submit"
                 className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95"
               >
-                Create Admin Account
+                Send OTP
               </button>
             </form>
+            )}
+
+            {step === 2 && (
+              <form onSubmit={handleVerifyOTP} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-white/70">Enter OTP</label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="w-full px-4 py-3 bg-brand-charcoal border border-white/10 rounded-xl text-white focus:outline-none focus:border-brand-orange transition-colors"
+                    placeholder="Enter 6-digit OTP"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95"
+                >
+                  Verify & Create Admin Account
+                </button>
+              </form>
+            )}
           </div>
 
           <p className="text-center mt-6 text-white/40 text-sm">
