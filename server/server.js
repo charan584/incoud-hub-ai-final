@@ -5,6 +5,9 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -14,6 +17,36 @@ const ADMIN_SECRET_KEY = 'incloudhub_admin_2024';
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+// Multer configuration for PDF uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed'));
+    }
+  },
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
 
 // Email Configuration
 const transporter = nodemailer.createTransport({
@@ -417,18 +450,121 @@ app.post('/api/auth/admin-reset-password', async (req, res) => {
 // Admin Routes
 app.get('/api/admin/resources', async (req, res) => {
   try {
-    const resources = await Resource.find().sort({ createdAt: -1 });
-    res.json({ success: true, resources });
+    const resourcesPath = path.join(__dirname, '..', 'src', 'data', 'resources.json');
+    
+    if (!fs.existsSync(resourcesPath)) {
+      return res.status(404).json({ success: false, error: 'Resources file not found' });
+    }
+    
+    const data = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
+    
+    const allResources = [];
+    const branches = data.branches;
+    
+    Object.keys(branches).forEach(branchKey => {
+      const branch = branches[branchKey];
+      const years = branch.years;
+      
+      Object.keys(years).forEach(yearKey => {
+        const yearData = years[yearKey];
+        
+        if (yearData.sections) {
+          Object.keys(yearData.sections).forEach(sectionKey => {
+            const section = yearData.sections[sectionKey];
+            const subjects = section.subjects;
+            
+            Object.keys(subjects).forEach(subjectKey => {
+              const subject = subjects[subjectKey];
+              subject.units.forEach((unit, unitIndex) => {
+                allResources.push({
+                  id: `${branchKey}-${yearKey}-${sectionKey}-${subjectKey}-${unitIndex}`,
+                  branch: branchKey,
+                  year: yearKey,
+                  section: sectionKey,
+                  subject: subjectKey,
+                  unit: unit.name,
+                  link: unit.link
+                });
+              });
+            });
+          });
+        } else if (yearData.subjects) {
+          const subjects = yearData.subjects;
+          Object.keys(subjects).forEach(subjectKey => {
+            const subject = subjects[subjectKey];
+            subject.units.forEach((unit, unitIndex) => {
+              allResources.push({
+                id: `${branchKey}-${yearKey}-none-${subjectKey}-${unitIndex}`,
+                branch: branchKey,
+                year: yearKey,
+                section: '-',
+                subject: subjectKey,
+                unit: unit.name,
+                link: unit.link
+              });
+            });
+          });
+        }
+      });
+    });
+    
+    res.json({ success: true, resources: allResources });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-app.post('/api/admin/resources', async (req, res) => {
+app.post('/api/admin/resources', upload.single('pdf'), async (req, res) => {
   try {
-    const resource = new Resource(req.body);
-    await resource.save();
-    res.json({ success: true, resource });
+    console.log('Received request body:', req.body);
+    console.log('Received file:', req.file);
+    
+    const { branch, year, section, subject, unit, link } = req.body;
+    const resourcesPath = path.join(__dirname, '..', 'src', 'data', 'resources.json');
+    
+    if (!fs.existsSync(resourcesPath)) {
+      return res.status(404).json({ success: false, error: 'Resources file not found' });
+    }
+    
+    const data = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
+    
+    // Use uploaded file URL if no link provided
+    const resourceLink = link || (req.file ? `http://localhost:5000/uploads/${req.file.filename}` : '');
+    
+    if (!resourceLink) {
+      return res.status(400).json({ success: false, error: 'Either link or PDF file is required' });
+    }
+    
+    if (!data.branches[branch]) {
+      data.branches[branch] = { name: branch, years: {} };
+    }
+    if (!data.branches[branch].years[year]) {
+      data.branches[branch].years[year] = { sections: {} };
+    }
+    
+    if (section && section !== '-') {
+      if (!data.branches[branch].years[year].sections) {
+        data.branches[branch].years[year].sections = {};
+      }
+      if (!data.branches[branch].years[year].sections[section]) {
+        data.branches[branch].years[year].sections[section] = { subjects: {} };
+      }
+      if (!data.branches[branch].years[year].sections[section].subjects[subject]) {
+        data.branches[branch].years[year].sections[section].subjects[subject] = { units: [] };
+      }
+      data.branches[branch].years[year].sections[section].subjects[subject].units.push({ name: unit, link: resourceLink });
+    } else {
+      if (!data.branches[branch].years[year].subjects) {
+        data.branches[branch].years[year].subjects = {};
+      }
+      if (!data.branches[branch].years[year].subjects[subject]) {
+        data.branches[branch].years[year].subjects[subject] = { units: [] };
+      }
+      data.branches[branch].years[year].subjects[subject].units.push({ name: unit, link: resourceLink });
+    }
+    
+    fs.writeFileSync(resourcesPath, JSON.stringify(data, null, 2));
+    res.json({ success: true, message: 'Resource added', link: resourceLink });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -436,8 +572,29 @@ app.post('/api/admin/resources', async (req, res) => {
 
 app.delete('/api/admin/resources/:id', async (req, res) => {
   try {
-    await Resource.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
+    const [branch, year, section, subject, unitIndex] = req.params.id.split('-');
+    const resourcesPath = path.join(__dirname, '..', 'src', 'data', 'resources.json');
+    
+    if (!fs.existsSync(resourcesPath)) {
+      return res.status(404).json({ success: false, error: 'Resources file not found' });
+    }
+    
+    const data = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
+    
+    if (section === 'none') {
+      data.branches[branch].years[year].subjects[subject].units.splice(parseInt(unitIndex), 1);
+      if (data.branches[branch].years[year].subjects[subject].units.length === 0) {
+        delete data.branches[branch].years[year].subjects[subject];
+      }
+    } else {
+      data.branches[branch].years[year].sections[section].subjects[subject].units.splice(parseInt(unitIndex), 1);
+      if (data.branches[branch].years[year].sections[section].subjects[subject].units.length === 0) {
+        delete data.branches[branch].years[year].sections[section].subjects[subject];
+      }
+    }
+    
+    fs.writeFileSync(resourcesPath, JSON.stringify(data, null, 2));
+    res.json({ success: true, message: 'Resource deleted' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
