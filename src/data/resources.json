@@ -9,14 +9,14 @@
               "subjects": {
                 "Physics": {
                   "units": [
-                    { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
-                    { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
-                    { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
+                    { "name": "Unit 1:interference", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                    { "name": "Unit 2:crystallography", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                    { "name": "Unit 3:magnetic materials", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
                   ]
                 },
                 "DSA": {
                   "units": [
-                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
+                    { "name": "Unit 1:sorting and seraching", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
                   ]
                 },
                 "C Language": {
@@ -28,8 +28,8 @@
                 },
                 "Mathematics": {
                   "units": [
-                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
-                    { "name": "Unit 2", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
+                    { "name": "Unit 1:matrices", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
+                    { "name": "Unit 2:eigen values", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
                     { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
                     { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
                   ]

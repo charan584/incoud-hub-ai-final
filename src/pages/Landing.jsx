@@ -5,6 +5,12 @@ import AntigravityCanvas from '../components/AntigravityCanvas';
 const Landing = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
   useEffect(() => {
     // Initialize Lucide icons
     if (window.lucide) {
@@ -161,12 +167,9 @@ const Landing = () => {
             <button onClick={() => navigate('/scheduler')} className="hover:text-brand-orange transition-colors">Study Scheduler</button>
             <button onClick={() => navigate('/resume')} className="hover:text-brand-orange transition-colors">AI Resume Suggester</button>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="text-sm font-medium px-4 py-2 hover:text-brand-orange transition-colors">Sign In</button>
-            <button className="bg-brand-orange hover:bg-[#e07d1f] text-black text-sm font-bold px-5 py-2.5 rounded-full transition-all active:scale-95 shadow-lg shadow-brand-orange/20">
-              Get Started
-            </button>
-          </div>
+          <button onClick={handleLogout} className="px-6 py-2 bg-white/10 hover:bg-brand-orange hover:text-black text-sm font-bold rounded-xl transition-all">
+            Logout
+          </button>
         </nav>
       </header>
 
