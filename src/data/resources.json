@@ -15,9 +15,9 @@
             },
             "C Language": {
               "units": [
-                { "name": "Unit 1: Basics", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
                 { "name": "Unit 2: Control Structures", "link": "/resources/cse/1/c/unit2" },
-                { "name": "Unit 3: Functions", "link": "/resources/cse/1/c/unit3" }
+                { "name": "Unit 3: Arrays", "link": "/resources/cse/1/c/unit3" }
               ]
             },
             "Data Structures": {
@@ -44,7 +44,9 @@
             },
             "Physics": {
               "units": [
-                { "name": "Complete Notes", "link": "/resources/cse/1/physics/complete" }
+                { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
               ]
             },
             "BCME": {
