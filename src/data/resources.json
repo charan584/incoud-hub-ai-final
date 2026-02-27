@@ -15,9 +15,9 @@
             },
             "C Language": {
               "units": [
-                { "name": "Complete Course Notes", "link": "/resources/cse/1/c/complete" },
-                { "name": "Unit 1: Basics", "link": "/resources/cse/1/c/unit1" },
-                { "name": "Unit 2: Control Structures", "link": "/resources/cse/1/c/unit2" }
+                { "name": "Unit 1: Basics", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                { "name": "Unit 2: Control Structures", "link": "/resources/cse/1/c/unit2" },
+                { "name": "Unit 3: Functions", "link": "/resources/cse/1/c/unit3" }
               ]
             },
             "Data Structures": {

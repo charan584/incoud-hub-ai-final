@@ -158,10 +158,20 @@ const ResourcesEngine = () => {
                   </div>
                   <h4 className="text-xl font-bold text-white mb-6">{subject}</h4>
                   <div className="space-y-3">
-                    {data.units.map((unit, idx) => (
+                    {data.units.filter(unit => !(subject.includes('Mathematics') && unit.name.includes('Important Questions'))).map((unit, idx) => (
                       <a
                         key={idx}
-                        href="#"
+                        href={
+                          subject === 'C Language' && selectedSection === 'A' && unit.name.includes('Unit 1') 
+                            ? 'https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view'
+                            : subject === 'C Language' && selectedSection === 'A' && unit.name.includes('Unit 2')
+                            ? 'https://acrobat.adobe.com/id/urn:aaid:sc:AP:a121ac7e-1706-4fb5-ad1a-ab495ea69a8a'
+                            : subject === 'C Language' && selectedSection === 'A' && unit.name.includes('Unit 3')
+                            ? 'https://acrobat.adobe.com/id/urn:aaid:sc:AP:ce7ffb4a-95d5-459d-b312-aa49720e6ec1'
+                            : unit.link
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex items-center justify-between p-3 rounded-xl bg-[#0f1115]/80 hover:bg-brand-orange hover:text-white transition-all text-sm text-gray-400"
                       >
                         <span>{unit.name}</span>

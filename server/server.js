@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const ADMIN_SECRET_KEY = 'incloudhub_admin_2024';
 
 // Middleware
 app.use(cors());
@@ -53,8 +54,27 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const AdminSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  name: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+const ResourceSchema = new mongoose.Schema({
+  branch: String,
+  year: String,
+  section: String,
+  subject: String,
+  unit: String,
+  link: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
 const Session = mongoose.model('Session', SessionSchema);
 const User = mongoose.model('User', UserSchema);
+const Admin = mongoose.model('Admin', AdminSchema);
+const Resource = mongoose.model('Resource', ResourceSchema);
 
 // Gemini API Configuration
 const GEMINI_API_KEY = 'AIzaSyCcW7AcozuL0qV1aXk-md4W_KBHBEODFwM';
@@ -106,6 +126,84 @@ app.post('/api/auth/register', async (req, res) => {
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.json({ success: true, token, user: { id: user._id, email: user.email, name: user.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin Signup
+app.post('/api/auth/admin-signup', async (req, res) => {
+  try {
+    const { email, password, name, adminKey } = req.body;
+    
+    if (adminKey !== ADMIN_SECRET_KEY) {
+      return res.status(403).json({ success: false, error: 'Invalid admin key' });
+    }
+    
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).json({ success: false, error: 'Admin already exists' });
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const admin = new Admin({ email, password: hashedPassword, name });
+    await admin.save();
+    
+    const token = jwt.sign({ adminId: admin._id, email: admin.email, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    
+    res.json({ success: true, token, admin: { id: admin._id, email: admin.email, name: admin.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin Login
+app.post('/api/auth/admin-login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).json({ success: false, error: 'Invalid credentials' });
+    }
+    
+    const validPassword = await bcrypt.compare(password, admin.password);
+    if (!validPassword) {
+      return res.status(400).json({ success: false, error: 'Invalid credentials' });
+    }
+    
+    const token = jwt.sign({ adminId: admin._id, email: admin.email, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    
+    res.json({ success: true, token, admin: { id: admin._id, email: admin.email, name: admin.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin Routes
+app.get('/api/admin/resources', async (req, res) => {
+  try {
+    const resources = await Resource.find().sort({ createdAt: -1 });
+    res.json({ success: true, resources });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/admin/resources', async (req, res) => {
+  try {
+    const resource = new Resource(req.body);
+    await resource.save();
+    res.json({ success: true, resource });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/admin/resources/:id', async (req, res) => {
+  try {
+    await Resource.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
