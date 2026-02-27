@@ -106,9 +106,9 @@ const Login = () => {
             <p className="text-white/40 text-sm">
               Don't have an account? <button onClick={() => navigate('/register')} className="text-brand-orange hover:text-white transition-colors">Sign up</button>
             </p>
-            <p className="text-white/40 text-sm">
+            {/* <p className="text-white/40 text-sm">
               Admin? <button onClick={() => navigate('/admin-login')} className="text-brand-orange hover:text-white transition-colors">Admin Login</button>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
