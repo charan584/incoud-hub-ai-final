@@ -4,69 +4,330 @@
       "name": "Computer Science Engineering",
       "years": {
         "1": {
-          "subjects": {
-            "Mathematics": {
-              "units": [
-                { "name": "Unit 1: Differential Equations", "link": "/resources/cse/1/math/unit1" },
-                { "name": "Unit 2: Linear Algebra", "link": "/resources/cse/1/math/unit2" },
-                { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
-                { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
-              ]
+          "sections": {
+            "A": {
+              "subjects": {
+                "Physics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                    { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                    { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
+                  ]
+                },
+                "DSA": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
+                  ]
+                },
+                "C Language": {
+                  "units": [
+                    { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                    { "name": "Unit 2: Control Structures", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:a121ac7e-1706-4fb5-ad1a-ab495ea69a8a" },
+                    { "name": "Unit 3: Arrays", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:ce7ffb4a-95d5-459d-b312-aa49720e6ec1" }
+                  ]
+                },
+                "Mathematics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
+                    { "name": "Unit 2", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
+                    { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
+                    { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
+                  ]
+                },
+                "English": {
+                  "units": [
+                    { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
+                  ]
+                }
+              }
             },
-            "C Language": {
-              "units": [
-                { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
-                { "name": "Unit 2: Control Structures", "link": "/resources/cse/1/c/unit2" },
-                { "name": "Unit 3: Arrays", "link": "/resources/cse/1/c/unit3" }
-              ]
+            "B": {
+              "subjects": {
+                "Physics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                    { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                    { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
+                  ]
+                },
+                "DSA": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
+                  ]
+                },
+                "C Language": {
+                  "units": [
+                    { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                    { "name": "Unit 2: Control Structures", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:a121ac7e-1706-4fb5-ad1a-ab495ea69a8a" },
+                    { "name": "Unit 3: Arrays", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:ce7ffb4a-95d5-459d-b312-aa49720e6ec1" }
+                  ]
+                },
+                "Mathematics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
+                    { "name": "Unit 2", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
+                    { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
+                    { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
+                  ]
+                },
+                "English": {
+                  "units": [
+                    { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
+                  ]
+                }
+              }
             },
-            "Data Structures": {
-              "units": [
-                { "name": "Unit 1: Arrays & Linked Lists", "link": "/resources/cse/1/ds/unit1" },
-                { "name": "Unit 2: Stacks & Queues", "link": "/resources/cse/1/ds/unit2" },
-                { "name": "Unit 3: Trees", "link": "/resources/cse/1/ds/unit3" }
-              ]
+            "C": {
+              "subjects": {
+                "Physics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                    { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                    { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
+                  ]
+                },
+                "DSA": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
+                  ]
+                },
+                "C Language": {
+                  "units": [
+                    { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                    { "name": "Unit 2: Control Structures", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:a121ac7e-1706-4fb5-ad1a-ab495ea69a8a" },
+                    { "name": "Unit 3: Arrays", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:ce7ffb4a-95d5-459d-b312-aa49720e6ec1" }
+                  ]
+                },
+                "Mathematics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
+                    { "name": "Unit 2", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
+                    { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
+                    { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
+                  ]
+                },
+                "English": {
+                  "units": [
+                    { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
+                  ]
+                }
+              }
             },
-            "English": {
-              "units": [
-                { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
-              ]
-            },
-            "BEEE": {
-              "units": [
-                { "name": "Unit 1: DC Circuits", "link": "/resources/cse/1/beee/unit1" }
-              ]
-            },
-            "Chemistry": {
-              "units": [
-                { "name": "Complete Notes", "link": "/resources/cse/1/chemistry/complete" }
-              ]
-            },
-            "Physics": {
-              "units": [
-                { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
-                { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
-                { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
-              ]
-            },
-            "BCME": {
-              "units": [
-                { "name": "Complete Notes", "link": "/resources/cse/1/bcme/complete" }
-              ]
+            "D": {
+              "subjects": {
+                "Physics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:373059ba-fd1e-4c3d-90f6-549a21a49dbb" },
+                    { "name": "Unit 2", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" },
+                    { "name": "Unit 3", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:b7ec9b95-a037-49f5-82ed-5aee562813f8" }
+                  ]
+                },
+                "DSA": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1AtyQvVIZ14_theY4kbP_xPhoL5cd7F8T/view?usp=drive_link" }
+                  ]
+                },
+                "C Language": {
+                  "units": [
+                    { "name": "Unit 1,2,3 : imp LAQ'S ", "link": "https://drive.google.com/file/d/1VVuh0pPNP7fIH3JOz4MtBm6DlvwywF_4/view" },
+                    { "name": "Unit 2: Control Structures", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:a121ac7e-1706-4fb5-ad1a-ab495ea69a8a" },
+                    { "name": "Unit 3: Arrays", "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:ce7ffb4a-95d5-459d-b312-aa49720e6ec1" }
+                  ]
+                },
+                "Mathematics": {
+                  "units": [
+                    { "name": "Unit 1", "link": "https://drive.google.com/file/d/1fknr2HtBTBNIoHFu4ZkYrsbCBHgp1S8B/view?usp=drive_link" },
+                    { "name": "Unit 2", "link": "https://drive.google.com/file/d/1OT5BadCvk_WnmQrHx3vkdClkLLrHCwXg/view?usp=drive_link" },
+                    { "name": "Unit 3: Calculus", "link": "/resources/cse/1/math/unit3" },
+                    { "name": "Important Questions", "link": "/resources/cse/1/math/important" }
+                  ]
+                },
+                "English": {
+                  "units": [
+                    { "name": "Complete Notes", "link": "/resources/cse/1/english/complete" }
+                  ]
+                }
+              }
             }
           }
         },
         "2": {
-          "subjects": {
-            "Operating Systems": {
-              "units": [
-                { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
-              ]
+          "sections": {
+            "A": {
+              "subjects": {
+                "Operating Systems": {
+                  "units": [
+                    { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
+                  ]
+                },
+                "DBMS": {
+                  "units": [
+                    { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
+                  ]
+                }
+              }
             },
-            "DBMS": {
-              "units": [
-                { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
-              ]
+            "B": {
+              "subjects": {
+                "Operating Systems": {
+                  "units": [
+                    { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
+                  ]
+                },
+                "DBMS": {
+                  "units": [
+                    { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
+                  ]
+                }
+              }
+            },
+            "C": {
+              "subjects": {
+                "Operating Systems": {
+                  "units": [
+                    { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
+                  ]
+                },
+                "DBMS": {
+                  "units": [
+                    { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
+                  ]
+                }
+              }
+            },
+            "D": {
+              "subjects": {
+                "Operating Systems": {
+                  "units": [
+                    { "name": "Unit 1: Process Management", "link": "/resources/cse/2/os/unit1" }
+                  ]
+                },
+                "DBMS": {
+                  "units": [
+                    { "name": "Unit 1: ER Model", "link": "/resources/cse/2/dbms/unit1" }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "3": {
+          "sections": {
+            "A": {
+              "subjects": {
+                "Computer Networks": {
+                  "units": [
+                    { "name": "Unit 1: Network Fundamentals", "link": "/resources/cse/3/cn/unit1" }
+                  ]
+                },
+                "Software Engineering": {
+                  "units": [
+                    { "name": "Unit 1: SDLC Models", "link": "/resources/cse/3/se/unit1" }
+                  ]
+                }
+              }
+            },
+            "B": {
+              "subjects": {
+                "Computer Networks": {
+                  "units": [
+                    { "name": "Unit 1: Network Fundamentals", "link": "/resources/cse/3/cn/unit1" }
+                  ]
+                },
+                "Software Engineering": {
+                  "units": [
+                    { "name": "Unit 1: SDLC Models", "link": "/resources/cse/3/se/unit1" }
+                  ]
+                }
+              }
+            },
+            "C": {
+              "subjects": {
+                "Computer Networks": {
+                  "units": [
+                    { "name": "Unit 1: Network Fundamentals", "link": "/resources/cse/3/cn/unit1" }
+                  ]
+                },
+                "Software Engineering": {
+                  "units": [
+                    { "name": "Unit 1: SDLC Models", "link": "/resources/cse/3/se/unit1" }
+                  ]
+                }
+              }
+            },
+            "D": {
+              "subjects": {
+                "Computer Networks": {
+                  "units": [
+                    { "name": "Unit 1: Network Fundamentals", "link": "/resources/cse/3/cn/unit1" }
+                  ]
+                },
+                "Software Engineering": {
+                  "units": [
+                    { "name": "Unit 1: SDLC Models", "link": "/resources/cse/3/se/unit1" }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "4": {
+          "sections": {
+            "A": {
+              "subjects": {
+                "Machine Learning": {
+                  "units": [
+                    { "name": "Unit 1: ML Fundamentals", "link": "/resources/cse/4/ml/unit1" }
+                  ]
+                },
+                "Cloud Computing": {
+                  "units": [
+                    { "name": "Unit 1: Cloud Basics", "link": "/resources/cse/4/cloud/unit1" }
+                  ]
+                }
+              }
+            },
+            "B": {
+              "subjects": {
+                "Machine Learning": {
+                  "units": [
+                    { "name": "Unit 1: ML Fundamentals", "link": "/resources/cse/4/ml/unit1" }
+                  ]
+                },
+                "Cloud Computing": {
+                  "units": [
+                    { "name": "Unit 1: Cloud Basics", "link": "/resources/cse/4/cloud/unit1" }
+                  ]
+                }
+              }
+            },
+            "C": {
+              "subjects": {
+                "Machine Learning": {
+                  "units": [
+                    { "name": "Unit 1: ML Fundamentals", "link": "/resources/cse/4/ml/unit1" }
+                  ]
+                },
+                "Cloud Computing": {
+                  "units": [
+                    { "name": "Unit 1: Cloud Basics", "link": "/resources/cse/4/cloud/unit1" }
+                  ]
+                }
+              }
+            },
+            "D": {
+              "subjects": {
+                "Machine Learning": {
+                  "units": [
+                    { "name": "Unit 1: ML Fundamentals", "link": "/resources/cse/4/ml/unit1" }
+                  ]
+                },
+                "Cloud Computing": {
+                  "units": [
+                    { "name": "Unit 1: Cloud Basics", "link": "/resources/cse/4/cloud/unit1" }
+                  ]
+                }
+              }
             }
           }
         }

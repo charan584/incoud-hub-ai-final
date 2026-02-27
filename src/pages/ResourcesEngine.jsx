@@ -28,7 +28,7 @@ const ResourcesEngine = () => {
 
   const getSubjects = () => {
     if (!selectedBranch || !selectedYear || !selectedSection) return null;
-    return resourcesData.branches[selectedBranch]?.years[selectedYear]?.subjects || {};
+    return resourcesData.branches[selectedBranch]?.years[selectedYear]?.sections?.[selectedSection]?.subjects || {};
   };
 
   return (
