@@ -196,7 +196,7 @@ const Landing = () => {
         </section>
 
         <section className="max-w-7xl mx-auto px-6 py-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="glass-card p-8 rounded-[2rem] flex flex-col group reveal-on-scroll">
               <div className="w-14 h-14 rounded-2xl bg-brand-orange/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i className="w-7 h-7 text-brand-orange" data-lucide="search"></i>
@@ -220,19 +220,6 @@ const Landing = () => {
               </p>
               <button onClick={() => navigate('/scheduler')} className="w-full py-3 px-4 rounded-xl border border-white/10 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
                 Plan Session
-              </button>
-            </div>
-
-            <div className="glass-card p-8 rounded-[2rem] flex flex-col group reveal-on-scroll">
-              <div className="w-14 h-14 rounded-2xl bg-brand-orange/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <i className="w-7 h-7 text-brand-orange" data-lucide="mic"></i>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Mock Interviewer</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-8 flex-grow">
-                Real-time vocal feedback and behavioral analysis to perfect your performance for top firms.
-              </p>
-              <button onClick={() => navigate('/mock-interview')} className="w-full py-3 px-4 rounded-xl border border-white/10 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
-                Start Practice
               </button>
             </div>
 

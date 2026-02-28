@@ -34,12 +34,19 @@ const ForgotPassword = () => {
     setSuccess('');
 
     try {
+      console.log('Resetting password for:', email);
       const response = await api.post('/auth/reset-password', { email, otp, newPassword });
+      
+      console.log('Reset response:', response.data);
+      
       if (response.data.success) {
-        setSuccess('Password reset successful! Redirecting...');
-        setTimeout(() => navigate('/'), 2000);
+        setSuccess('Password reset successful! Redirecting to login...');
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       }
     } catch (err) {
+      console.error('Reset error:', err);
       setError(err.response?.data?.error || 'Failed to reset password');
     }
   };

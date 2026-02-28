@@ -9,10 +9,12 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
       const response = await api.post('/auth/login', { email, password });
@@ -24,7 +26,14 @@ const Login = () => {
         setError(response.data.error || 'Login failed');
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
+      if (err.code === 'ERR_NETWORK' || err.message.includes('Network Error')) {
+        setError('Cannot connect to server. Please make sure the backend is running on port 5000.');
+      } else {
+        const errorMsg = err.response?.data?.error || 'Login failed';
+        setError(errorMsg);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,9 +98,10 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand-orange/20"
+                disabled={loading}
+                className="w-full bg-brand-orange hover:bg-[#e07d1f] text-black font-bold py-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand-orange/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
+                {loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
 

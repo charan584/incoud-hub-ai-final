@@ -4,8 +4,14 @@ import AntigravityCanvas from '../components/AntigravityCanvas';
 
 const StudyScheduler = () => {
   const navigate = useNavigate();
-  const [sessions, setSessions] = useState([]);
+  const [sessions, setSessions] = useState(() => {
+    const saved = localStorage.getItem('studySessions');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [showModal, setShowModal] = useState(false);
+  const [showCompletionPopup, setShowCompletionPopup] = useState(false);
+  const [completedSession, setCompletedSession] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [newSession, setNewSession] = useState({
     subject: '',
     topic: '',
@@ -14,12 +20,37 @@ const StudyScheduler = () => {
     duration: '60'
   });
 
+  // Update current time every minute
+  React.useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const isSessionTimeComplete = (session) => {
+    const sessionDateTime = new Date(`${session.date}T${session.time}`);
+    const sessionEndTime = new Date(sessionDateTime.getTime() + parseInt(session.duration) * 60000);
+    return currentTime >= sessionEndTime;
+  };
+
   const handleCreateSession = () => {
     if (newSession.subject && newSession.date && newSession.time) {
-      setSessions([...sessions, { ...newSession, id: Date.now(), status: 'scheduled' }]);
+      const updatedSessions = [...sessions, { ...newSession, id: Date.now(), status: 'scheduled' }];
+      setSessions(updatedSessions);
+      localStorage.setItem('studySessions', JSON.stringify(updatedSessions));
       setNewSession({ subject: '', topic: '', date: '', time: '', duration: '60' });
       setShowModal(false);
     }
+  };
+
+  const handleCompleteSession = (sessionId) => {
+    const session = sessions.find(s => s.id === sessionId);
+    const updatedSessions = sessions.map(s => 
+      s.id === sessionId ? { ...s, status: 'completed' } : s
+    );
+    setSessions(updatedSessions);
+    localStorage.setItem('studySessions', JSON.stringify(updatedSessions));
+    setCompletedSession(session);
+    setShowCompletionPopup(true);
   };
 
   return (
@@ -82,17 +113,35 @@ const StudyScheduler = () => {
                   <div key={session.id} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:border-brand-orange/50 transition-all">
                     <div className="flex justify-between items-start mb-4">
                       <h4 className="text-xl font-bold text-white">{session.subject}</h4>
-                      <span className="px-3 py-1 bg-brand-orange/20 text-brand-orange text-xs font-bold rounded-full">
+                      <span className={`px-3 py-1 text-xs font-bold rounded-full ${
+                        session.status === 'completed' 
+                          ? 'bg-green-500/20 text-green-400' 
+                          : 'bg-brand-orange/20 text-brand-orange'
+                      }`}>
                         {session.status}
                       </span>
                     </div>
                     <p className="text-gray-400 mb-4">{session.topic}</p>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                       </svg>
                       <span>{session.time} • {session.duration} mins</span>
                     </div>
+                    {session.status === 'scheduled' && (
+                      <button
+                        onClick={() => handleCompleteSession(session.id)}
+                        disabled={!isSessionTimeComplete(session)}
+                        className={`w-full font-bold py-2 rounded-lg transition-all ${
+                          isSessionTimeComplete(session)
+                            ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400 cursor-pointer'
+                            : 'bg-gray-500/20 text-gray-500 cursor-not-allowed'
+                        }`}
+                        title={!isSessionTimeComplete(session) ? 'Complete the session duration first' : 'Mark as complete'}
+                      >
+                        {isSessionTimeComplete(session) ? '✓ Mark as Complete' : '⏳ Session in Progress'}
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -174,6 +223,28 @@ const StudyScheduler = () => {
                 Create Session
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showCompletionPopup && completedSession && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-[#1e1e1e] border border-green-500/30 rounded-2xl p-8 max-w-md w-full text-center">
+            <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h3 className="text-3xl font-bold text-white mb-3">🎉 Session Completed!</h3>
+            <p className="text-gray-400 mb-2">Great job completing your study session on</p>
+            <p className="text-brand-orange font-bold text-xl mb-6">{completedSession.subject}</p>
+            <p className="text-gray-500 text-sm mb-8">Keep up the momentum! Consistency is key to success.</p>
+            <button
+              onClick={() => setShowCompletionPopup(false)}
+              className="w-full py-3 bg-brand-orange hover:bg-orange-600 rounded-lg text-white font-bold transition-all"
+            >
+              Continue
+            </button>
           </div>
         </div>
       )}

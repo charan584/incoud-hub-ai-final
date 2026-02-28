@@ -57,6 +57,15 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// Verify email configuration on startup
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log('❌ Email configuration error:', error);
+  } else {
+    console.log('✅ Email server is ready to send messages');
+  }
+});
+
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/incloudhub';
 
@@ -167,6 +176,8 @@ app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, name } = req.body;
     
+    console.log('Registration attempt for:', email);
+    
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ success: false, error: 'User already exists' });
@@ -174,6 +185,8 @@ app.post('/api/auth/register', async (req, res) => {
     
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    console.log('Generated OTP:', otp);
     
     const user = new User({ 
       email, 
@@ -184,6 +197,8 @@ app.post('/api/auth/register', async (req, res) => {
     });
     await user.save();
     
+    console.log('Sending OTP email to:', email);
+    
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
@@ -191,8 +206,11 @@ app.post('/api/auth/register', async (req, res) => {
       html: `<h2>Welcome to Incloudhub AI!</h2><p>Your verification OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
     });
     
+    console.log('OTP email sent successfully');
+    
     res.json({ success: true, message: 'OTP sent to your email. Please verify to complete registration.' });
   } catch (error) {
+    console.error('Registration error:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -220,6 +238,39 @@ app.post('/api/auth/verify-registration', async (req, res) => {
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     
     res.json({ success: true, token, user: { id: user._id, email: user.email, name: user.name } });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Resend OTP for unverified users
+app.post('/api/auth/resend-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    
+    if (user.isVerified) {
+      return res.status(400).json({ success: false, error: 'Email already verified' });
+    }
+    
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.verificationOTP = otp;
+    user.verificationOTPExpires = Date.now() + 600000;
+    await user.save();
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify Your Account - Incloudhub AI',
+      html: `<h2>Welcome to Incloudhub AI!</h2><p>Your verification OTP is: <strong>${otp}</strong></p><p>This OTP will expire in 10 minutes.</p>`
+    });
+    
+    res.json({ success: true, message: 'OTP resent to your email' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -278,6 +329,9 @@ app.post('/api/auth/reset-password', async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
     
+    console.log('Password reset attempt for:', email);
+    console.log('OTP received:', otp);
+    
     const user = await User.findOne({ 
       email, 
       resetPasswordOTP: otp,
@@ -285,16 +339,20 @@ app.post('/api/auth/reset-password', async (req, res) => {
     });
     
     if (!user) {
+      console.log('Invalid or expired OTP');
       return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
     }
     
+    console.log('User found, updating password...');
     user.password = await bcrypt.hash(newPassword, 10);
     user.resetPasswordOTP = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
     
+    console.log('Password updated successfully');
     res.json({ success: true, message: 'Password reset successful' });
   } catch (error) {
+    console.error('Password reset error:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
