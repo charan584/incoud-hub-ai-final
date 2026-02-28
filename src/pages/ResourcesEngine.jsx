@@ -55,9 +55,10 @@ const ResourcesEngine = () => {
             <h1 className="font-bold text-white text-xl tracking-tight">Incloudhub <span className="text-brand-orange">AI</span></h1>
           </div>
           <div className="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+            <button onClick={() => navigate('/landing')} className="hover:text-brand-orange transition-colors">Home</button>
+            <button className="text-white border-b-2 border-brand-orange pb-1">Resources Engine</button>
             <button onClick={() => navigate('/scheduler')} className="hover:text-brand-orange transition-colors">Study Scheduler</button>
             <button onClick={() => navigate('/resume')} className="hover:text-brand-orange transition-colors">AI Resume</button>
-            <button className="text-white border-b-2 border-brand-orange pb-1">Resources Engine</button>
           </div>
         </div>
       </nav>

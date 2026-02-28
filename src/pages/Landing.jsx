@@ -4,6 +4,14 @@ import AntigravityCanvas from '../components/AntigravityCanvas';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = React.useState('Explorer');
+
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.name) {
+      setUserName(user.name);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -15,38 +23,6 @@ const Landing = () => {
     // Initialize Lucide icons
     if (window.lucide) {
       window.lucide.createIcons();
-    }
-
-    // GSAP Hero Animation
-    const heroTitle = document.getElementById('hero-title');
-    if (heroTitle && window.gsap) {
-      const text = heroTitle.innerText;
-      heroTitle.innerText = '';
-
-      text.split(' ').forEach(word => {
-        const span = document.createElement('span');
-        span.classList.add('reveal-word');
-        span.innerText = word + ' ';
-        heroTitle.appendChild(span);
-      });
-
-      window.gsap.registerPlugin(window.ScrollTrigger);
-      const words = document.querySelectorAll('.reveal-word');
-
-      window.gsap.to(words, {
-        opacity: 1,
-        filter: 'blur(0px)',
-        y: 0,
-        rotation: 0,
-        duration: 1,
-        stagger: 0.1,
-        ease: 'power4.out',
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top center+=200',
-          toggleActions: 'play none none none'
-        }
-      });
     }
 
     // Float text animation
@@ -179,8 +155,8 @@ const Landing = () => {
             <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse"></span>
             Ecosystem 2.0 is now live
           </div>
-          <h1 className="font-bold leading-[1.1] mb-8 tracking-tighter" id="hero-title" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
-            Welcome back, Explorer.<br />Elevate your future with our AI ecosystem.
+          <h1 className="font-bold leading-[1.1] mb-8 tracking-tighter" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
+            Welcome back, <span className="text-brand-orange">{userName}</span>.<br />Elevate your future with our AI ecosystem.
           </h1>
           <p className="text-white/50 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             The most powerful suite of AI tools designed for students and professionals. Streamline your workflow, ace your interviews, and build your career.

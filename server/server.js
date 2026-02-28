@@ -139,8 +139,8 @@ const Admin = mongoose.model('Admin', AdminSchema);
 const Resource = mongoose.model('Resource', ResourceSchema);
 
 // Gemini API Configuration
-const GEMINI_API_KEY = 'AIzaSyCcW7AcozuL0qV1aXk-md4W_KBHBEODFwM';
-const GEMINI_PRO_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+const GEMINI_API_KEY = 'AIzaSyCr0Yg1g2h4zrIJWpXsqL0Q1VNkb-iDRBk';
+const GEMINI_PRO_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
 const GEMINI_VISION_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // JWT Middleware
@@ -161,6 +161,10 @@ const authMiddleware = (req, res, next) => {
 };
 
 // Test endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'Incloudhub AI Backend Server is Running! 🚀' });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ 
     success: true, 
@@ -849,6 +853,35 @@ app.post('/api/sessions/:id/reschedule', authMiddleware, async (req, res) => {
     
     res.json({ success: true, session });
   } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Generate Mock Test
+app.post('/api/generate-mock', async (req, res) => {
+  try {
+    const { subject, topic } = req.body;
+    
+    const prompt = `Generate a mock test with 10 multiple choice questions on the topic: "${topic}" in the subject "${subject}". Format each question as:
+
+Q1. [Question]
+A) [Option]
+B) [Option]
+C) [Option]
+D) [Option]
+Correct Answer: [Letter]
+
+Make questions practical and exam-oriented.`;
+    
+    const response = await axios.post(GEMINI_PRO_URL, {
+      contents: [{ parts: [{ text: prompt }] }]
+    });
+
+    const mockTest = response.data.candidates[0].content.parts[0].text;
+    
+    res.json({ success: true, mockTest });
+  } catch (error) {
+    console.error('Mock test generation error:', error.response?.data || error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });

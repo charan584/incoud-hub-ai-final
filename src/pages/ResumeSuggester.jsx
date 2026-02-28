@@ -522,97 +522,135 @@ const ResumeAnalyzer = () => {
   };
 
   return (
-    <div style={{ padding: '40px', backgroundColor: '#0A0A0A', color: 'white', minHeight: '100vh', position: 'relative' }}>
+    <div className="min-h-screen bg-[#0f1115] text-gray-200">
       <AntigravityCanvas />
-      <div style={{ maxWidth: '800px', margin: '0 auto', background: '#1e1e1e', padding: '30px', borderRadius: '15px', position: 'relative', zIndex: 10 }}>
-        <h2>Skill Analyzer</h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <input
-            placeholder="Enter skills (e.g., C, Python)"
-            value={skillsInput}
-            onChange={(e) => setSkillsInput(e.target.value)}
-            style={{ padding: '12px', background: '#2d2d2d', border: '1px solid #444', color: 'white', borderRadius: '8px' }}
-          />
+      <style>{`
+        .glass-panel {
+          background: rgba(26, 29, 35, 0.7);
+          backdrop-filter: blur(16px);
+          border: 1px solid rgba(247, 140, 37, 0.1);
+        }
+      `}</style>
 
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <select 
-                value={branch} 
-                onChange={(e) => setBranch(e.target.value)}
-                style={{ flex: 1, padding: '10px', background: '#2d2d2d', color: 'white' }}
-            >
-              {Object.keys(SKILL_MAPS).map(b => <option key={b} value={b}>{b}</option>)}
-            </select>
-
-            <select 
-                value={year} 
-                onChange={(e) => setYear(Number(e.target.value))}
-                style={{ flex: 1, padding: '10px', background: '#2d2d2d', color: 'white' }}
-            >
-              <option value={1}>1st Year</option>
-              <option value={2}>2nd Year</option>
-              <option value={3}>3rd Year</option>
-              <option value={4}>4th Year</option>
-            </select>
+      <nav className="border-b border-[#2d3139] glass-panel sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="bg-brand-orange p-2 rounded-lg shadow-[0_0_15px_rgba(247,140,37,0.4)]">
+              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+              </svg>
+            </div>
+            <h1 className="font-bold text-white text-xl tracking-tight">Incloudhub <span className="text-brand-orange">AI</span></h1>
           </div>
-
-          <button 
-            onClick={analyzeResume}
-            style={{ padding: '15px', background: '#f39c12', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-          >
-            {loading ? "Analyzing..." : "🚀 Analyze My Profile"}
-          </button>
+          <div className="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+            <button onClick={() => window.location.href='/landing'} className="hover:text-brand-orange transition-colors">Home</button>
+            <button onClick={() => window.location.href='/resources'} className="hover:text-brand-orange transition-colors">Resources Engine</button>
+            <button onClick={() => window.location.href='/scheduler'} className="hover:text-brand-orange transition-colors">Study Scheduler</button>
+            <button className="text-white border-b-2 border-brand-orange pb-1">AI Resume</button>
+          </div>
         </div>
+      </nav>
 
-        <div style={{ marginTop: '40px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '30px' }}>
-            {scores.map((s, i) => (
-              <div key={i} style={{ background: '#2d2d2d', padding: '20px', borderRadius: '10px', textAlign: 'center' }}>
-                <h1 style={{ color: '#f39c12', margin: 0 }}>{s.value}%</h1>
-                <p style={{ margin: '5px 0 0 0', fontSize: '12px', color: '#aaa' }}>{s.label}</p>
-              </div>
-            ))}
-          </div>
+      <main className="max-w-7xl mx-auto p-6 md:p-12 relative z-10">
+        <header className="mb-12">
+          <h2 className="text-5xl font-extrabold text-white tracking-tight mb-4">AI Resume <span className="text-brand-orange">Suggester</span></h2>
+          <p className="text-gray-400 text-lg max-w-2xl">Analyze your skills and get personalized career guidance.</p>
+        </header>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
-            <div style={{ background: '#2d2d2d', padding: '20px', borderRadius: '10px', borderLeft: '5px solid #2ecc71' }}>
-              <h4>✅ Matched (Year {year})</h4>
-              <p>{matchedSkills.length > 0 ? matchedSkills.join(", ") : "---"}</p>
+        <div className="glass-panel p-8 rounded-3xl">
+          <h3 className="text-2xl font-bold text-white mb-6">Skill Analyzer</h3>
+
+          <div className="space-y-5">
+            <input
+              placeholder="Enter skills (e.g., C, Python)"
+              value={skillsInput}
+              onChange={(e) => setSkillsInput(e.target.value)}
+              className="w-full px-4 py-3 bg-[#0f1115] border border-[#2d3139] text-white rounded-xl focus:outline-none focus:border-brand-orange transition-colors"
+            />
+
+            <div className="grid grid-cols-2 gap-5">
+              <select 
+                  value={branch} 
+                  onChange={(e) => setBranch(e.target.value)}
+                  className="px-4 py-3 bg-[#0f1115] border border-[#2d3139] text-white rounded-xl focus:outline-none focus:border-brand-orange transition-colors"
+              >
+                {Object.keys(SKILL_MAPS).map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+
+              <select 
+                  value={year} 
+                  onChange={(e) => setYear(Number(e.target.value))}
+                  className="px-4 py-3 bg-[#0f1115] border border-[#2d3139] text-white rounded-xl focus:outline-none focus:border-brand-orange transition-colors"
+              >
+                <option value={1}>1st Year</option>
+                <option value={2}>2nd Year</option>
+                <option value={3}>3rd Year</option>
+                <option value={4}>4th Year</option>
+              </select>
             </div>
 
-            <div style={{ background: '#2d2d2d', padding: '20px', borderRadius: '10px', borderLeft: '5px solid #e74c3c' }}>
-              <h4>⚠️ Required Skills (Year {year})</h4>
-              <p>{missingSkills.length > 0 ? missingSkills.join(", ") : "---"}</p>
-            </div>
+            <button 
+              onClick={analyzeResume}
+              className="w-full py-4 bg-brand-orange hover:bg-orange-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-brand-orange/20 active:scale-95"
+            >
+              {loading ? "Analyzing..." : "🚀 Analyze My Profile"}
+            </button>
           </div>
 
-          <div style={{ background: '#2d2d2d', padding: '20px', borderRadius: '10px', marginBottom: '20px' }}>
-            <h3 style={{ color: '#f39c12', marginTop: 0 }}>🤖 AI Career Coach Suggestions</h3>
-            {aiSuggestions.map((s, i) => (
-              <div key={i} style={{ background: '#1a1a1a', padding: '12px', borderRadius: '8px', marginBottom: '10px', fontSize: '14px' }}>
-                {s}
-              </div>
-            ))}
-          </div>
-
-          <div style={{ background: '#2d2d2d', padding: '20px', borderRadius: '10px' }}>
-            <h3 style={{ color: '#f39c12', marginTop: 0 }}>🗺️ 3-Month Roadmap</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
-              {roadmap.map((r, i) => (
-                <div key={i} style={{ background: '#1a1a1a', padding: '15px', borderRadius: '8px' }}>
-                  <div style={{ color: '#f39c12', fontWeight: 'bold', marginBottom: '8px' }}>{r.month}</div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '10px' }}>{r.title}</div>
-                  <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: '#aaa' }}>
-                    {r.items.map((item, j) => (
-                      <li key={j}>{item}</li>
-                    ))}
-                  </ul>
+          <div className="mt-10 space-y-8">
+            <div className="grid grid-cols-3 gap-4">
+              {scores.map((s, i) => (
+                <div key={i} className="glass-panel p-6 rounded-2xl text-center">
+                  <h1 className="text-4xl font-bold text-brand-orange mb-2">{s.value}%</h1>
+                  <p className="text-sm text-gray-400">{s.label}</p>
                 </div>
               ))}
             </div>
+
+            <div className="grid grid-cols-2 gap-5">
+              <div className="glass-panel p-6 rounded-2xl border-l-4 border-green-500">
+                <h4 className="text-lg font-bold text-white mb-3">✅ Matched (Year {year})</h4>
+                <p className="text-gray-400">{matchedSkills.length > 0 ? matchedSkills.join(", ") : "---"}</p>
+              </div>
+
+              <div className="glass-panel p-6 rounded-2xl border-l-4 border-red-500">
+                <h4 className="text-lg font-bold text-white mb-3">⚠️ Required Skills (Year {year})</h4>
+                <p className="text-gray-400">{missingSkills.length > 0 ? missingSkills.join(", ") : "---"}</p>
+              </div>
+            </div>
+
+            <div className="glass-panel p-6 rounded-2xl">
+              <h3 className="text-2xl font-bold text-brand-orange mb-4">🤖 AI Career Coach Suggestions</h3>
+              <div className="space-y-3">
+                {aiSuggestions.map((s, i) => (
+                  <div key={i} className="bg-[#0f1115] p-4 rounded-xl text-sm text-gray-300">
+                    {s}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-panel p-6 rounded-2xl">
+              <h3 className="text-2xl font-bold text-brand-orange mb-4">🗺️ 3-Month Roadmap</h3>
+              <div className="grid grid-cols-3 gap-4">
+                {roadmap.map((r, i) => (
+                  <div key={i} className="bg-[#0f1115] p-5 rounded-xl">
+                    <div className="text-brand-orange font-bold mb-2">{r.month}</div>
+                    <div className="text-sm font-bold mb-3 text-white">{r.title}</div>
+                    <ul className="text-xs text-gray-400 space-y-1 pl-5">
+                      {r.items.map((item, j) => (
+                        <li key={j}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

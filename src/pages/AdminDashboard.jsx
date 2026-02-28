@@ -212,7 +212,6 @@ const AdminDashboard = () => {
                 <option value="B">Section B</option>
                 <option value="C">Section C</option>
                 <option value="D">Section D</option>
-                <option value="-">No Section</option>
               </select>
               <input
                 type="text"

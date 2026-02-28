@@ -74,6 +74,18 @@
                       "link": "http://localhost:5000/uploads/1772229751454-english.pdf"
                     }
                   ]
+                },
+                "chemistry": {
+                  "units": [
+                    {
+                      "name": "Unit 1",
+                      "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:a6bb3a5b-a73f-44dc-b8c7-0a5376ee5b29 "
+                    },
+                    {
+                      "name": "unit 2 ",
+                      "link": "https://acrobat.adobe.com/id/urn:aaid:sc:AP:c31513a6-2e5c-45b0-a4a5-8464a01f6ee6"
+                    }
+                  ]
                 }
               }
             },
@@ -376,6 +388,16 @@
                   ]
                 }
               }
+            }
+          },
+          "subjects": {
+            "c": {
+              "units": [
+                {
+                  "name": "i",
+                  "link": "http://localhost:5000/uploads/1772243491206-english.pdf"
+                }
+              ]
             }
           }
         },

@@ -48,8 +48,8 @@ const AntigravityCanvas = () => {
         }
 
         ctx.fillStyle = dist < maxDist 
-          ? `rgba(247, 140, 37, ${((maxDist - dist) / maxDist) * 0.6})`
-          : 'rgba(247, 140, 37, 0.3)';
+          ? `rgba(247, 140, 37, ${((maxDist - dist) / maxDist) * 0.9})`
+          : 'rgba(247, 140, 37, 0.6)';
         
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
@@ -78,7 +78,7 @@ const AntigravityCanvas = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-[-1] pointer-events-none opacity-50"
+      className="fixed inset-0 z-[-1] pointer-events-none opacity-80"
       style={{ background: '#0A0A0A' }}
     />
   );
